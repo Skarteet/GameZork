@@ -16,6 +16,7 @@ namespace GameZork
             test.Start();
 
             return run;
+
         }
 
         static IHostBuilder CreatHostBuilder(string[] args) =>
