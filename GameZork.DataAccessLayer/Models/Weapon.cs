@@ -4,5 +4,6 @@
     {
         public string Name { get; set; }
         public int MissRate { get; set; }
+        public int Damage { get; set; }
     }
 }

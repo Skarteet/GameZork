@@ -20,6 +20,11 @@
             });
 
             services.AddTransient<WeaponsAccessLayer>();
+            services.AddTransient<CellAccessLayer>();
+            services.AddTransient<ItemAccessLayer>();
+            services.AddTransient<MonsterAccessLayer>();
+            services.AddTransient<ObjectTypeAccessLayer>();
+            services.AddTransient<PlayerAccessLayer>();
 
             return services;
         }

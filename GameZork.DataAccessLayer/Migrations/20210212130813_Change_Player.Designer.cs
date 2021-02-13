@@ -4,14 +4,16 @@ using GameZork.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameZork.DataAccessLayer.Migrations
 {
     [DbContext(typeof(GameZorkDbContext))]
-    partial class GameZorkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210212130813_Change_Player")]
+    partial class Change_Player
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
