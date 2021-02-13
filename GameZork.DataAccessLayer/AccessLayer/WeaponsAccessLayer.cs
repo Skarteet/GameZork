@@ -6,7 +6,9 @@ namespace GameZork.DataAccessLayer.AccessLayer
     {
         public WeaponsAccessLayer(GameZorkDbContext context): base(context)
         {
-
+            
         }
+
+        
     }
 }

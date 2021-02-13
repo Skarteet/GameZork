@@ -4,14 +4,16 @@ using GameZork.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameZork.DataAccessLayer.Migrations
 {
     [DbContext(typeof(GameZorkDbContext))]
-    partial class GameZorkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210212104717_Additems_Monster_Table")]
+    partial class Additems_Monster_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,28 +43,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cell");
-                });
-
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Item", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ObjectTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObjectTypeId");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Monster", b =>
@@ -96,6 +76,28 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Monster");
+                });
+
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Object", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.ObjectType", b =>
@@ -189,17 +191,17 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.ToTable("Weapons");
                 });
 
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Item", b =>
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Object", b =>
                 {
-                    b.HasOne("GameZork.DataAccessLayer.Models.ObjectType", "ObjectType")
+                    b.HasOne("GameZork.DataAccessLayer.Models.Object", "Item")
                         .WithMany()
-                        .HasForeignKey("ObjectTypeId");
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("GameZork.DataAccessLayer.Models.Player", null)
-                        .WithMany("Items")
+                        .WithMany("Objects")
                         .HasForeignKey("PlayerId");
 
-                    b.Navigation("ObjectType");
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
@@ -220,7 +222,7 @@ namespace GameZork.DataAccessLayer.Migrations
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Objects");
 
                     b.Navigation("Weapons");
                 });

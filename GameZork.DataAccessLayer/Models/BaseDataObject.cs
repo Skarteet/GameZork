@@ -1,4 +1,6 @@
-﻿namespace GameZork.DataAccessLayer.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GameZork.DataAccessLayer.Models
 {
     public abstract class BaseDataObject
     {

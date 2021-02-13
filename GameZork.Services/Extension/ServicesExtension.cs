@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using StudentManager.DataAccessLayer.Extensions;
+﻿using GameZork.DataAccessLayer.Extensions;
+using GameZork.DataAccessLayer.Seeder;
+using GameZork.Services.Service;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameZork.Services.Extension
 {
@@ -9,6 +11,8 @@ namespace GameZork.Services.Extension
         {
             services.AddDataAccessLayerService();
             services.AddScoped<WeaponsService>();
+            services.AddScoped<MonsterService>();
+            services.AddScoped<Seeder>();
             return services;
         }
     }
