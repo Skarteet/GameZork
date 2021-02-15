@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace GameZork.DataAccessLayer.AccessLayer
 {
-    public class ObjectTypeAccessLayer : BaseAccessLayer<ObjectType>
+    public class MapAccessLayer : BaseAccessLayer<Map>
     {
-        public ObjectTypeAccessLayer(GameZorkDbContext context) : base(context)
+        public MapAccessLayer(GameZorkDbContext context) : base(context)
         {
 
         }
+
+        public void Remove(Map map)
+        {
+            this.context.Remove(map);
+        }
+
     }
 }

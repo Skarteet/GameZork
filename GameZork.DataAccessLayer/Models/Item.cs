@@ -8,6 +8,10 @@ namespace GameZork.DataAccessLayer.Models
 {
     public class Item : BaseDataObject
     {
-        public virtual ObjectType ObjectType { get; set; }
+        public string Name { get; set; }
+        public int? HpRestoreValue { get; set; }
+        public int? AttackBoost{ get; set; }
+        public int? DefenseBoost{ get; set; }
+        public virtual ICollection<Player> Players { get; set; }
     }
 }
