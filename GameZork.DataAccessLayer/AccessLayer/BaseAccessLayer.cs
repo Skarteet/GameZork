@@ -15,7 +15,7 @@ namespace GameZork.DataAccessLayer.AccessLayer
         /// <summary>
         ///     Gets the Db context.
         /// </summary>
-        private readonly GameZorkDbContext context;
+        protected readonly GameZorkDbContext context;
 
         /// <summary>
         ///     Gets the Db model set.

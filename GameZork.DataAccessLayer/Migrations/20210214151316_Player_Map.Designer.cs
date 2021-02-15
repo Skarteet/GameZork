@@ -4,14 +4,16 @@ using GameZork.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameZork.DataAccessLayer.Migrations
 {
     [DbContext(typeof(GameZorkDbContext))]
-    partial class GameZorkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210214151316_Player_Map")]
+    partial class Player_Map
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MapId")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PosX")
@@ -43,7 +45,7 @@ namespace GameZork.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapId");
+                    b.HasIndex("PlayerId");
 
                     b.ToTable("Cell");
                 });
@@ -70,18 +72,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Item");
-                });
-
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Map", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Map");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Monster", b =>
@@ -136,9 +126,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MapId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MaxHP")
                         .HasColumnType("int");
 
@@ -157,8 +144,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CellId");
-
-                    b.HasIndex("MapId");
 
                     b.ToTable("Player");
                 });
@@ -216,9 +201,9 @@ namespace GameZork.DataAccessLayer.Migrations
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Cell", b =>
                 {
-                    b.HasOne("GameZork.DataAccessLayer.Models.Map", null)
-                        .WithMany("Cells")
-                        .HasForeignKey("MapId");
+                    b.HasOne("GameZork.DataAccessLayer.Models.Player", null)
+                        .WithMany("Map")
+                        .HasForeignKey("PlayerId");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
@@ -227,13 +212,7 @@ namespace GameZork.DataAccessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("CellId");
 
-                    b.HasOne("GameZork.DataAccessLayer.Models.Map", "Map")
-                        .WithMany()
-                        .HasForeignKey("MapId");
-
                     b.Navigation("Cell");
-
-                    b.Navigation("Map");
                 });
 
             modelBuilder.Entity("ItemPlayer", b =>
@@ -266,9 +245,9 @@ namespace GameZork.DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Map", b =>
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
                 {
-                    b.Navigation("Cells");
+                    b.Navigation("Map");
                 });
 #pragma warning restore 612, 618
         }

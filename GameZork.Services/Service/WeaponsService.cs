@@ -17,12 +17,7 @@ namespace GameZork.Services.Service
 
         public List<WeaponDto> GetAll()
         {
-            var res = this.weapons.GetCollection()?.ToList();
-            return this.weapons.GetCollection().Select(w => new WeaponDto
-            {
-                Id = w.Id,
-                Name = w.Name
-            }).ToList();
+            return this.weapons.GetCollection().Select(w => new WeaponDto(w)).ToList();
         }
     }
 }

@@ -13,5 +13,10 @@ namespace GameZork.DataAccessLayer.AccessLayer
         {
 
         }
+
+        public Cell AddCell(Cell cell)
+        {
+            return this.context.Cell.Add(cell)?.Entity;
+        }
     }
 }

@@ -4,14 +4,16 @@ using GameZork.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameZork.DataAccessLayer.Migrations
 {
     [DbContext(typeof(GameZorkDbContext))]
-    partial class GameZorkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210214112635_Weapons_Player_ManyToMany")]
+    partial class Weapons_Player_ManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MapId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PosX")
                         .HasColumnType("int");
 
@@ -43,8 +42,6 @@ namespace GameZork.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MapId");
-
                     b.ToTable("Cell");
                 });
 
@@ -55,33 +52,19 @@ namespace GameZork.DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AttackBoost")
+                    b.Property<int?>("ObjectTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DefenseBoost")
+                    b.Property<int?>("PlayerId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("HpRestoreValue")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ObjectTypeId");
+
+                    b.HasIndex("PlayerId");
 
                     b.ToTable("Item");
-                });
-
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Map", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Map");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Monster", b =>
@@ -117,6 +100,30 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.ToTable("Monster");
                 });
 
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.ObjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AttackBoost")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DefenseBoost")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HpRestoreValue")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ObjectType");
+                });
+
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -134,9 +141,6 @@ namespace GameZork.DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MapId")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxHP")
@@ -157,8 +161,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CellId");
-
-                    b.HasIndex("MapId");
 
                     b.ToTable("Player");
                 });
@@ -184,21 +186,6 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.ToTable("Weapons");
                 });
 
-            modelBuilder.Entity("ItemPlayer", b =>
-                {
-                    b.Property<int>("ItemsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemsId", "PlayersId");
-
-                    b.HasIndex("PlayersId");
-
-                    b.ToTable("ItemPlayer");
-                });
-
             modelBuilder.Entity("PlayerWeapon", b =>
                 {
                     b.Property<int>("PlayersId")
@@ -214,11 +201,17 @@ namespace GameZork.DataAccessLayer.Migrations
                     b.ToTable("PlayerWeapon");
                 });
 
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Cell", b =>
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Item", b =>
                 {
-                    b.HasOne("GameZork.DataAccessLayer.Models.Map", null)
-                        .WithMany("Cells")
-                        .HasForeignKey("MapId");
+                    b.HasOne("GameZork.DataAccessLayer.Models.ObjectType", "ObjectType")
+                        .WithMany()
+                        .HasForeignKey("ObjectTypeId");
+
+                    b.HasOne("GameZork.DataAccessLayer.Models.Player", null)
+                        .WithMany("Items")
+                        .HasForeignKey("PlayerId");
+
+                    b.Navigation("ObjectType");
                 });
 
             modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
@@ -227,28 +220,7 @@ namespace GameZork.DataAccessLayer.Migrations
                         .WithMany()
                         .HasForeignKey("CellId");
 
-                    b.HasOne("GameZork.DataAccessLayer.Models.Map", "Map")
-                        .WithMany()
-                        .HasForeignKey("MapId");
-
                     b.Navigation("Cell");
-
-                    b.Navigation("Map");
-                });
-
-            modelBuilder.Entity("ItemPlayer", b =>
-                {
-                    b.HasOne("GameZork.DataAccessLayer.Models.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GameZork.DataAccessLayer.Models.Player", null)
-                        .WithMany()
-                        .HasForeignKey("PlayersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PlayerWeapon", b =>
@@ -266,9 +238,9 @@ namespace GameZork.DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Map", b =>
+            modelBuilder.Entity("GameZork.DataAccessLayer.Models.Player", b =>
                 {
-                    b.Navigation("Cells");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

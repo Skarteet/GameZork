@@ -19,11 +19,7 @@ namespace GameZork.Services.Service
 
         public List<MonsterDto> GetAll()
         {
-            return this.monsters.GetCollection().Select(m => new MonsterDto
-            {
-                Id = m.Id,
-                Name = m.Name
-            }).ToList();
+            return this.monsters.GetCollection().Select(m => new MonsterDto(m)).ToList();
         }
     }
 }

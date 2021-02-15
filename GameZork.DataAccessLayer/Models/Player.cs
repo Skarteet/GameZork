@@ -18,5 +18,6 @@ namespace GameZork.DataAccessLayer.Models
         public virtual ICollection<Item> Items { get; set; }
 
         public virtual Cell Cell { get; set; }
+        public virtual Map Map { get; set;}
     }
 }

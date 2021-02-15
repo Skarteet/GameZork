@@ -23,8 +23,8 @@
             services.AddTransient<CellAccessLayer>();
             services.AddTransient<ItemAccessLayer>();
             services.AddTransient<MonsterAccessLayer>();
-            services.AddTransient<ObjectTypeAccessLayer>();
             services.AddTransient<PlayerAccessLayer>();
+            services.AddTransient<MapAccessLayer>();
 
             return services;
         }
