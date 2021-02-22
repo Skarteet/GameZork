@@ -13,7 +13,7 @@ namespace GameZork.DataAccessLayer.Seeder
         {
             return new List<Monster>()
             {
-                new Monster{Name = "Troll"}
+                new Monster{Name = "Troll", Defense=10, HP=100, MaxHP=100, MissRate=20, Power= 40, Rate=3 }
             };
         }
     }

@@ -5,7 +5,6 @@ namespace GameZork.MenuParts
 {
     public class Menu
     {
-        public EventHandler Exit { get; set; }
         private static NewGame NewGameView { get; set; }
         public Menu()
         {
@@ -43,7 +42,7 @@ namespace GameZork.MenuParts
                     break;
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
-                    Exit.Invoke(this, null);
+                    Globals.Exit.Invoke(this, null);
                     break;
                 default:
                     Start();

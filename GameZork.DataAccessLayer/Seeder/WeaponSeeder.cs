@@ -13,7 +13,10 @@ namespace GameZork.DataAccessLayer.Seeder
         {
             return new List<Weapon>
             {
-                new Weapon{Name = "Spear",Damage=10,MissRate=5}
+                new Weapon{Name = "Lance",Damage=40,MissRate=10},
+                new Weapon{Name = "Poing",Damage=20,MissRate=5},
+                new Weapon{Name = "Epée",Damage=30,MissRate=5},
+                new Weapon{Name = "Marteau",Damage=60,MissRate=20},  
             };
         }
     }

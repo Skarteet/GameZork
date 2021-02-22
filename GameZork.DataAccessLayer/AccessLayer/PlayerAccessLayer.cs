@@ -10,9 +10,8 @@ namespace GameZork.DataAccessLayer.AccessLayer
 {
     public class PlayerAccessLayer : BaseAccessLayer<Player>
     {
-        public PlayerAccessLayer (GameZorkDbContext context): base(context)
+        public PlayerAccessLayer(GameZorkDbContext context) : base(context)
         {
-            
         }
         public Player CreatePlayer(Player player)
         {
@@ -48,7 +47,7 @@ namespace GameZork.DataAccessLayer.AccessLayer
             context.SaveChanges();
         }
 
-        public void AddItem(int idPlayer,int idItem)
+        public void AddItem(int idPlayer, int idItem)
         {
             var player = context.Player.Single(p => p.Id == idPlayer);
             var item = context.Item.Single(i => i.Id == idItem);
@@ -59,6 +58,11 @@ namespace GameZork.DataAccessLayer.AccessLayer
 
         public void Save(Player player)
         {
+            var pA = context.Player.Single(p => p.Id == player.Id);
+            var cA = context.Cell.Single(c => c.Id == player.Cell.Id);
+            context.Entry(pA).State = EntityState.Detached;
+            context.Entry(cA).State = EntityState.Detached;
+            context.SaveChanges();
             context.Player.Update(player);
             context.SaveChanges();
         }

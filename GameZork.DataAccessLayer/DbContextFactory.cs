@@ -10,7 +10,7 @@
             var dbContextBuilder = new DbContextOptionsBuilder<GameZorkDbContext>();
 
             dbContextBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS; Database=ZorkDb; Trusted_Connection=true;",
-                opt => opt.MigrationsAssembly("GameZork.DataAccessLayer"));
+                opt => opt.MigrationsAssembly("GameZork.DataAccessLayer")).EnableSensitiveDataLogging();
 
             return new GameZorkDbContext(dbContextBuilder.Options);
         }

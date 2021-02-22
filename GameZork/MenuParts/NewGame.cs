@@ -1,15 +1,14 @@
-﻿using GameZork.Services.Service;
+﻿using GameZork.GameParts;
+using GameZork.Services.Service;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameZork.MenuParts
 {
     public class NewGame
     {
         private readonly PlayerService PlayerService;
+        private static TurnAction TurnActionView { get; set; }
         public NewGame(PlayerService playerService)
         {
             this.PlayerService = playerService;
@@ -28,6 +27,9 @@ namespace GameZork.MenuParts
             }
 
             Globals.Player = PlayerService.CreatePlayer(name);
+            TurnActionView = Globals.Services.GetService<TurnAction>();
+            Console.Clear();
+            TurnActionView.TurnActionChoice();
         }
     }
 }

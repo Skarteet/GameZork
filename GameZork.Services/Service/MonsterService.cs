@@ -21,5 +21,11 @@ namespace GameZork.Services.Service
         {
             return this.monsters.GetCollection().Select(m => new MonsterDto(m)).ToList();
         }
+
+        public MonsterDto GetRandom()
+        {
+            var monsters = GetAll();
+            return monsters.ElementAt(new Random().Next(0, monsters.Count()));
+        }
     }
 }

@@ -1,17 +1,21 @@
 ﻿using GameZork.Services.Dto;
+using GameZork.Services.Service;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameZork.GameParts
 {
     public class TurnAction
     {
-        public TurnAction()
+        private PlayerService PlayerService { get; set; }
+        private CellService CellService { get; set; }
+        private Fight Fight { get; set; }
+        public TurnAction(PlayerService playerService, CellService cellService)
         {
-
+            PlayerService = playerService;
+            CellService = cellService;
+            Fight = Globals.Services.GetService<Fight>();
         }
 
         public void TurnActionChoice()
@@ -27,13 +31,17 @@ namespace GameZork.GameParts
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
                     Inventory();
+                    Console.Clear();
                     break;
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
                     Stats();
+                    Console.Clear();
                     break;
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
+                    Move();
+                    Console.Clear();
                     break;
                 default:
                     break;
@@ -46,21 +54,27 @@ namespace GameZork.GameParts
         {
             Console.Clear();
             Console.WriteLine("Objets : ");
-            foreach (var item in Globals.Player.Items)
+            if (Globals.Player.Items != null && Globals.Player.Items.Any())
             {
-                Console.WriteLine(item.ToString());
+                foreach (var item in Globals.Player.Items)
+                {
+                    Console.WriteLine(item.ToString());
+                }
             }
             Console.WriteLine();
             Console.WriteLine("Armes : ");
-            foreach (var weapon in Globals.Player.Weapons)
+            if (Globals.Player.Weapons != null && Globals.Player.Weapons.Any())
             {
-                Console.WriteLine(weapon.ToString());
+                foreach (var weapon in Globals.Player.Weapons)
+                {
+                    Console.WriteLine(weapon.ToString());
+                }
             }
             Console.WriteLine();
             Console.WriteLine("Ranger son sac ? (Tape \"Ranger\")");
 
-            string line = null;
-            while (line != "Ranger".ToLowerInvariant())
+            string line = string.Empty;
+            while (line.ToLowerInvariant() != "ranger")
             {
                 line = Console.ReadLine();
             }
@@ -81,8 +95,8 @@ namespace GameZork.GameParts
 
             Console.WriteLine("Reprendre ses esprits ? (Tape \"Reveil\")");
 
-            string line = null;
-            while (line != "Reveil".ToLowerInvariant())
+            string line = string.Empty;
+            while (line.ToLowerInvariant() != "reveil")
             {
                 line = Console.ReadLine();
             }
@@ -92,8 +106,8 @@ namespace GameZork.GameParts
         {
             Console.Clear();
             Console.WriteLine("Vers où souhaites-tu t'aventurer ? (Tape Est,Nord,Ouest,Sud)");
-            string line = Console.ReadLine();
-            while (line == "Est" || line == "Nord" || line == "Sud" || line == "Ouest")
+            string line = Console.ReadLine().ToLowerInvariant();
+            while (line != "est" && line != "nord" && line != "sud" && line != "ouest")
             {
                 Console.WriteLine("Exprime toi plus clairement ! (Tape Est,Nord,Ouest,Sud)");
                 line = Console.ReadLine();
@@ -101,31 +115,39 @@ namespace GameZork.GameParts
 
             var cell = Globals.Player.Cell;
             CellDto nextCell = null;
+            bool move = false;
 
-            while (nextCell == null)
+            while (!move)
             {
                 switch (line)
                 {
-                    case "Est":
+                    case "est":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX + 1 && c.PosY == cell.PosY);
                         break;
-                    case "Nord":
+                    case "nord":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX && c.PosY == cell.PosY + 1);
                         break;
-                    case "Sud":
+                    case "sud":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX - 1 && c.PosY == cell.PosY);
                         break;
-                    case "Ouest":
+                    case "ouest":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX && c.PosY == cell.PosY - 1);
                         break;
                 }
 
-                Console.WriteLine("Les montagnes géantes bloque ton avancée. Tu dois choisir une autre direction !");
-                line = Console.ReadLine();
+                if (nextCell == null)
+                {
+                    Console.WriteLine("Les montagnes géantes bloque ton avancée. Tu dois choisir une autre direction !");
+                    line = Console.ReadLine();
+                }
+                else
+                    move = true;
             }
 
             Globals.Player.Cell = nextCell;
+            //PlayerService.Save(Globals.Player);
 
+            MovementRandomMeeting();
         }
 
         private void MovementRandomMeeting()
@@ -135,7 +157,7 @@ namespace GameZork.GameParts
             //Fight
             if (Enumerable.Range(1, 30).Contains(random))
             {
-
+                Fight.Start();
             }
             //Item
             else if (Enumerable.Range(31, 60).Contains(random))
@@ -145,7 +167,7 @@ namespace GameZork.GameParts
             //Nothing
             else
             {
-
+                Nothing();
             }
         }
 
@@ -156,5 +178,6 @@ namespace GameZork.GameParts
             Console.WriteLine();
 
         }
+
     }
 }

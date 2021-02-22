@@ -1,4 +1,5 @@
 ﻿using GameZork.DataAccessLayer.Models;
+using GameZork.Services.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace GameZork.Services.Dto
         public int NextLevelXpRequired { get; set; }
 
         public List<WeaponDto> Weapons { get; set; }
+
         public List<ItemDto> Items { get; set; }
 
         public CellDto Cell { get; set; }
-
         public MapDto Map { get; set; }
 
         public PlayerDto() { }
