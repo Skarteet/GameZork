@@ -1,5 +1,7 @@
 ﻿using GameZork.DataAccessLayer.AccessLayer;
+using GameZork.DataAccessLayer.Models;
 using GameZork.Services.Dto;
+using GameZork.Services.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,11 @@ namespace GameZork.Services.Service
         public List<CellDto> GetAll()
         {
             return this.cells.GetCollection().Select(c => new CellDto(c)).ToList();
+        }
+
+        public void Save(CellDto cell)
+        {
+            this.cells.Save(MapperExtension.Mapper.Map<Cell>(cell));
         }
     }
 }

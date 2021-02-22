@@ -1,6 +1,7 @@
 ﻿using GameZork.DataAccessLayer.AccessLayer;
 using GameZork.DataAccessLayer.Models;
 using GameZork.Services.Dto;
+using GameZork.Services.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,14 @@ namespace GameZork.Services.Service
         private readonly PlayerAccessLayer players;
         private readonly CellAccessLayer cells;
         private readonly MapAccessLayer maps;
+        private readonly WeaponsAccessLayer weapons;
 
-        public PlayerService(PlayerAccessLayer playerAccessLayer, CellAccessLayer cellAccessLayer, MapAccessLayer mapAccessLayer)
+        public PlayerService(PlayerAccessLayer playerAccessLayer, CellAccessLayer cellAccessLayer, MapAccessLayer mapAccessLayer,WeaponsAccessLayer weaponsAccessLayer)
         {
             this.players = playerAccessLayer;
             this.cells = cellAccessLayer;
             this.maps = mapAccessLayer;
+            this.weapons = weaponsAccessLayer;
         }
 
         public PlayerDto CreatePlayer(string name)
@@ -37,9 +40,16 @@ namespace GameZork.Services.Service
             };
             player.Map = GenerateMap();
             player.Cell = player.Map.Cells.ElementAt(new Random().Next(1, player.Map.Cells.Count));
-            player = this.players.CreatePlayer(player);
+            player.Weapons = new List<Weapon> { weapons.GetSingle(w => w.Name == "Poing")};
+            
+            //player = this.players.CreatePlayer(player);
 
             return new PlayerDto(player);
+        }
+        public void Save(PlayerDto playerDto)
+        {
+            var player = MapperExtension.Mapper.Map<Player>(playerDto);
+            players.Save(player);
         }
 
         public void DeletePlayer(int playerId)
@@ -79,22 +89,6 @@ namespace GameZork.Services.Service
         public void AddItem(int idPlayer, int idItem)
         {
             this.players.AddItem(idPlayer, idItem);
-        }
-
-        private void Save(PlayerDto player)
-        {
-            this.players.Save(new Player 
-            {  
-                Defense = player.Defense
-                , HP = player.HP
-                , Id = player.Id
-                , Level = player.Level
-                , MaxHP = player.MaxHP
-                , Name = player.Name
-                , NextLevelXpRequired = player.NextLevelXpRequired
-                , Power = player.Power
-                , XP = player.XP
-            });
         }
     }
 }

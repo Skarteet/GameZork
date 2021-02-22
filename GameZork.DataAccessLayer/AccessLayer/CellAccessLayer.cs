@@ -18,5 +18,18 @@ namespace GameZork.DataAccessLayer.AccessLayer
         {
             return this.context.Cell.Add(cell)?.Entity;
         }
+
+        public void Save(Cell cell)
+        {
+            var cellBase = this.context.Cell.Find(cell.Id);
+
+            cellBase.canMoveTo = cell.canMoveTo;
+            cellBase.Description = cell.Description;
+            cellBase.PosX = cell.PosX;
+            cellBase.PosY = cell.PosY;
+
+            this.context.Cell.Update(cellBase);
+            this.context.SaveChanges();
+        }
     }
 }

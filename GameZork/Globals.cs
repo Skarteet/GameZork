@@ -12,5 +12,7 @@ namespace GameZork
         public static IServiceProvider Services { get; set; }
 
         public static PlayerDto Player { get; set; }
+
+        public static EventHandler Exit { get; set; }
     }
 }

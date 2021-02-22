@@ -6,16 +6,17 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 using GameZork.MenuParts;
-
+using GameZork.GameParts;
+using Microsoft.Extensions.Logging;
 
 namespace GameZork
 {
-    class Program 
+    class Program
     {
         private static Menu Menu { get; set; }
         static Task Main(string[] args)
         {
-            var mapper = ServicesExtension.InstantiateMapper();
+            MapperExtension.InstantiateMapper();
 
             using IHost host = CreatHostBuilder(args).Build().SeedDatabase();
             var run = host.RunAsync();
@@ -23,7 +24,7 @@ namespace GameZork
             Globals.Services = host.Services;
 
             Menu = host.Services.GetService<Menu>();
-            Menu.Exit += (o, e) => host.StopAsync();
+            Globals.Exit += (o, e) => { host.StopAsync(); Environment.Exit(0); };
 
             Menu.Start();
 
@@ -48,10 +49,16 @@ namespace GameZork
 
 
             return Host.CreateDefaultBuilder(args)
+                .ConfigureLogging((logging) =>
+                {
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+                })
                 .ConfigureServices((_, services) =>
                     services.AddTransient<test>()
                     .AddTransient<Menu>()
                     .AddTransient<NewGame>()
+                    .AddTransient<TurnAction>()
+                    .AddTransient<Fight>()
                     .AddDataService());
         }
     }

@@ -29,6 +29,7 @@ namespace GameZork.DataAccessLayer.AccessLayer
         protected BaseAccessLayer(GameZorkDbContext context)
         {
             this.context = context;
+
             this.modelSet = this.context.Set<TModel>();
         }
 
