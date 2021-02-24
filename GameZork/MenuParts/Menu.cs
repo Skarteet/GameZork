@@ -22,26 +22,22 @@ namespace GameZork.MenuParts
             Console.WriteLine("2 : Load Saved Game");
             Console.WriteLine("3 : About Game");
             Console.WriteLine("4 : Exit");
-            var key = Console.ReadKey();
+            var res = ZorkRead.ReadLine();
 
 
-            switch (key.Key)
+            switch (res)
             {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
+                case "1":
                     NewGameView = Globals.Services.GetService<NewGame>();
                     NewGameView.CreateGame();
                     break;
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
+                case "2":
                     break;
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
+                case "3":
                     About.BackToMenu += (o, e) => Start();
                     About.AboutView();
                     break;
-                case ConsoleKey.D4:
-                case ConsoleKey.NumPad4:
+                case "4":
                     Globals.Exit.Invoke(this, null);
                     break;
                 default:

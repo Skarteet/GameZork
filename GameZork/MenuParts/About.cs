@@ -16,11 +16,10 @@ namespace GameZork.MenuParts
             Console.WriteLine();
             Console.WriteLine("1 : Retourner au menu principal");
 
-            var key = Console.ReadKey();
-            switch (key.Key)
+            var res = ZorkRead.ReadLine();
+            switch (res)
             {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
+                case "1":
                     BackToMenu.Invoke(null, null);
                     break;
                 default:

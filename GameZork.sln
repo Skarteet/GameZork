@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameZork", "GameZork\GameZork.csproj", "{B44C49FB-E5BD-4DAA-BBB7-62410F2366A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameZork", "GameZork\GameZork.csproj", "{B44C49FB-E5BD-4DAA-BBB7-62410F2366A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameZork.DataAccessLayer", "GameZork.DataAccessLayer\GameZork.DataAccessLayer.csproj", "{A06845EC-F532-46CE-9243-500E69739FAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameZork.DataAccessLayer", "GameZork.DataAccessLayer\GameZork.DataAccessLayer.csproj", "{A06845EC-F532-46CE-9243-500E69739FAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameZork.Services", "GameZork.Services\GameZork.Services.csproj", "{F9D7A840-E7C1-472A-BDA1-E0BC83CE8D6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameZork.Services", "GameZork.Services\GameZork.Services.csproj", "{F9D7A840-E7C1-472A-BDA1-E0BC83CE8D6D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A06845EC-F532-46CE-9243-500E69739FAE} = {A06845EC-F532-46CE-9243-500E69739FAE}
 	EndProjectSection

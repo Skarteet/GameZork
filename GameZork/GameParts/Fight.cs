@@ -49,32 +49,32 @@ namespace GameZork.GameParts
 
         private void PlayerTurn()
         {
-            Console.WriteLine("Que veux tu faire ?");
-
-            int actionNumber = 0;
-            var listArme = new Dictionary<int, WeaponDto>();
-            foreach (var weapon in Globals.Player.Weapons)
-            {
-                actionNumber++;
-                listArme.Add(actionNumber, weapon);
-                Console.WriteLine($"{actionNumber}- Attaquer avec {weapon.Name}");
-            }
-
-            Console.WriteLine($"{actionNumber += 1}- Utiliser un object de l'inventaire");
-            Console.WriteLine($"{actionNumber += 1}- Run");
-            var res = Console.ReadLine();
-
-            int.TryParse(res, out int valueSelected);
-
-            while (valueSelected == 0)
-            {
-                Console.WriteLine("Soit plus clair dans ta décision !");
-                res = Console.ReadLine();
-                int.TryParse(res, out valueSelected);
-            }
             bool actionDone = false;
             while (!actionDone)
             {
+                Console.WriteLine("Que veux tu faire ?");
+
+                int actionNumber = 0;
+                var listArme = new Dictionary<int, WeaponDto>();
+                foreach (var weapon in Globals.Player.Weapons)
+                {
+                    actionNumber++;
+                    listArme.Add(actionNumber, weapon);
+                    Console.WriteLine($"{actionNumber}- Attaquer avec {weapon.Name}");
+                }
+
+                Console.WriteLine($"{actionNumber += 1}- Utiliser un object de l'inventaire");
+                Console.WriteLine($"{actionNumber += 1}- Run");
+                var res = ZorkRead.ReadLine();
+
+                int.TryParse(res, out int valueSelected);
+
+                while (valueSelected == 0)
+                {
+                    Console.WriteLine("Soit plus clair dans ta décision !");
+                    res = ZorkRead.ReadLine();
+                    int.TryParse(res, out valueSelected);
+                }
                 if (valueSelected == actionNumber)
                 {
                     Run();
@@ -110,15 +110,15 @@ namespace GameZork.GameParts
                 listItem.Add(actionNumber, item);
                 Console.WriteLine($"{actionNumber}- Utiliser {item.Name}");
             }
-            Console.WriteLine($"{actionNumber}- Annuler");
-            var res = Console.ReadLine();
+            Console.WriteLine($"{actionNumber += 1}- Annuler");
+            var res = ZorkRead.ReadLine();
 
             int.TryParse(res, out int valueSelected);
 
             while (valueSelected == 0)
             {
                 Console.WriteLine("Soit plus clair dans ta décision !");
-                res = Console.ReadLine();
+                res = ZorkRead.ReadLine();
                 int.TryParse(res, out valueSelected);
             }
 
@@ -129,12 +129,14 @@ namespace GameZork.GameParts
             var itemUse = listItem.GetValueOrDefault(valueSelected);
 
 
-            Globals.Player.Defense = itemUse.DefenseBoost ?? 0;
-            Globals.Player.Power = itemUse.AttackBoost ?? 0;
-            Globals.Player.HP = itemUse.HpRestoreValue ?? 0;
+            Globals.Player.Defense += itemUse.DefenseBoost ?? 0;
+            Globals.Player.Power += itemUse.AttackBoost ?? 0;
+            Globals.Player.HP += itemUse.HpRestoreValue ?? 0;
+            if (Globals.Player.MaxHP < Globals.Player.HP)
+                Globals.Player.HP = Globals.Player.MaxHP;
             Globals.Player.Items.Remove(itemUse);
 
-            Console.WriteLine($"Vous avez utilisé {itemUse.Name} et regagnez {itemUse.HpRestoreValue} ainsi {itemUse.AttackBoost} d'attaque et {itemUse.DefenseBoost} de défense définitivement !");
+            Console.WriteLine($"Vous avez utilisé {itemUse.Name} et regagnez {itemUse.HpRestoreValue ?? 0} ainsi que  {itemUse.AttackBoost ?? 0} d'attaque et {itemUse.DefenseBoost ?? 0} de défense définitivement !");
             return true;
         }
 
@@ -144,7 +146,7 @@ namespace GameZork.GameParts
             if (res == 3)
             {
                 Console.WriteLine("Vous avez réussi à vous échapper ! (Appuye sur Entrer pour continuer)");
-                Console.ReadLine();
+                ZorkRead.ReadLine();
                 EndFight = true;
             }
             else
@@ -169,7 +171,7 @@ namespace GameZork.GameParts
                 Console.WriteLine($"Tu es passé niveau {Globals.Player.Level} ! Tu as gagné 10HP et es maintenant en pleine forme !");
             }
             Console.WriteLine("Appuye sur Entrer pour continuer");
-            Console.ReadLine();
+            ZorkRead.ReadLine();
         }
 
         private void MonsterTurn()
@@ -190,16 +192,16 @@ namespace GameZork.GameParts
             if (weapon == null || target == null)
                 return false;
 
-            var dmg = (weapon.Damage - target.Defense) > 0 ? weapon.Damage - target.Defense : 0;
+            var dmg = (weapon.Damage + Globals.Player.Power - target.Defense) > 0 ? weapon.Damage + Globals.Player.Power - target.Defense : 0;
             target.HP -= dmg;
             Console.WriteLine($"Tu attaques avec {weapon.Name} et infliges {dmg} dégats au monstre !");
             if (target.HP > 0)
-                return false;
-            else
             {
                 Console.WriteLine($"Il lui reste {Monster.HP} !");
-                return true;
+                return false;
             }
+            else
+                return true;
         }
     }
 }

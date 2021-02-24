@@ -18,12 +18,12 @@ namespace GameZork.MenuParts
         {
             Console.Clear();
             Console.WriteLine("Quel est ton nom jeune aventurier ?");
-            var name = Console.ReadLine();
+            var name = ZorkRead.ReadLine();
 
             while(string.IsNullOrWhiteSpace(name))
             {
                 Console.WriteLine("Tu dois me donner ton nom !");
-                name = Console.ReadLine();
+                name = ZorkRead.ReadLine();
             }
 
             Globals.Player = PlayerService.CreatePlayer(name);
