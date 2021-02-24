@@ -27,6 +27,11 @@ namespace GameZork.DataAccessLayer.Seeder
                 await this.dbContext.Monster.AddRangeAsync(MonsterSeeder.Seed()).ConfigureAwait(false);
             }
 
+            if (!this.dbContext.Item.Any())
+            {
+                await this.dbContext.Item.AddRangeAsync(ItemSeeder.Seed()).ConfigureAwait(false);
+            }
+
             await this.dbContext.SaveChangesAsync();
         }
     }

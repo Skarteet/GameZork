@@ -16,13 +16,15 @@ namespace GameZork.Services.Service
         private readonly CellAccessLayer cells;
         private readonly MapAccessLayer maps;
         private readonly WeaponsAccessLayer weapons;
+        private readonly ItemAccessLayer items;
 
-        public PlayerService(PlayerAccessLayer playerAccessLayer, CellAccessLayer cellAccessLayer, MapAccessLayer mapAccessLayer,WeaponsAccessLayer weaponsAccessLayer)
+        public PlayerService(PlayerAccessLayer playerAccessLayer, CellAccessLayer cellAccessLayer, MapAccessLayer mapAccessLayer,WeaponsAccessLayer weaponsAccessLayer,ItemAccessLayer itemAccessLayer)
         {
             this.players = playerAccessLayer;
             this.cells = cellAccessLayer;
             this.maps = mapAccessLayer;
             this.weapons = weaponsAccessLayer;
+            this.items = itemAccessLayer;
         }
 
         public PlayerDto CreatePlayer(string name)
@@ -41,6 +43,7 @@ namespace GameZork.Services.Service
             player.Map = GenerateMap();
             player.Cell = player.Map.Cells.ElementAt(new Random().Next(1, player.Map.Cells.Count));
             player.Weapons = new List<Weapon> { weapons.GetSingle(w => w.Name == "Poing")};
+            player.Items = items.GetCollection().ToList();
             
             //player = this.players.CreatePlayer(player);
 

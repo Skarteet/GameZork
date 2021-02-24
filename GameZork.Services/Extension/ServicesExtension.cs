@@ -12,9 +12,9 @@ namespace GameZork.Services.Extension
 {
     public static class ServicesExtension
     {
-        public static IServiceCollection AddDataService(this IServiceCollection services)
+        public static IServiceCollection AddDataService(this IServiceCollection services, string dbPath)
         {
-            services.AddDataAccessLayerService();
+            services.AddDataAccessLayerService(dbPath);
             services.AddScoped<WeaponsService>();
             services.AddScoped<MonsterService>();
             services.AddScoped<CellService>();

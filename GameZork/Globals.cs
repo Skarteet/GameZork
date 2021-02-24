@@ -1,9 +1,7 @@
-﻿using GameZork.Services.Dto;
+﻿
+using GameZork.Services.Dto;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameZork
 {
@@ -14,5 +12,6 @@ namespace GameZork
         public static PlayerDto Player { get; set; }
 
         public static EventHandler Exit { get; set; }
+ 
     }
 }
