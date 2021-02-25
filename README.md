@@ -1,10 +1,10 @@
 # GameZork
 Lancer le projet :
- - Saisir l'adresse de votre BDD dans le fichier appsettings.json dans Server=votre_serveur, 
+ - Saisir l'adresse de votre BDD dans le fichier GameZork_LEBLANC/appsettings.json dans Server=votre_serveur, 
 ainsi que le nom que votre BDD dans Database=votre_BDD
 dans la chaine de caractère "myDb1"
 
-Au niveau de GameZork/GameZork.DataAccessLayer, lance "dotnet ef database update" dans un terminal 
+Au niveau de GameZork_LEBLANC/GameZork.DataAccessLayer, lance "dotnet ef database update" dans un terminal 
 
 tu peux ensuite exécuter la solution dans visual studio directement 
 
