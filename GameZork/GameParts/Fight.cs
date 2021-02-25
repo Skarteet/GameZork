@@ -21,6 +21,7 @@ namespace GameZork.GameParts
 
         public void Start()
         {
+            EndFight = false;
             var monster = MonsterService.GetRandom();
             Monster = monster;
             Console.Clear();

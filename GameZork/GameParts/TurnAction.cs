@@ -125,10 +125,10 @@ namespace GameZork.GameParts
                     case "nord":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX && c.PosY == cell.PosY + 1);
                         break;
-                    case "sud":
+                    case "ouest":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX - 1 && c.PosY == cell.PosY);
                         break;
-                    case "ouest":
+                    case "sud":
                         nextCell = Globals.Player.Map.Cells.FirstOrDefault(c => c.PosX == cell.PosX && c.PosY == cell.PosY - 1);
                         break;
                 }
@@ -139,7 +139,9 @@ namespace GameZork.GameParts
                     line = ZorkRead.ReadLine();
                 }
                 else
+                {
                     move = true;
+                }
             }
 
             Globals.Player.Cell = nextCell;
@@ -172,8 +174,8 @@ namespace GameZork.GameParts
         private static void Nothing()
         {
             Console.Clear();
-            Console.WriteLine("Tu est bien arrivé à destination sans encombres ! ");
-            Console.WriteLine();
+            Console.WriteLine("Tu est bien arrivé à destination sans encombres ! (Appuye sur Entrer)");
+            Console.ReadLine();
 
         }
 
