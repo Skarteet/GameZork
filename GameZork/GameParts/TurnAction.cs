@@ -153,12 +153,12 @@ namespace GameZork.GameParts
             var random = new Random().Next(1, 100);
 
             //Fight
-            if (Enumerable.Range(1, 30).Contains(random))
+            if (random >= 1 && random <= 30)
             {
                 Fight.Start();
             }
             //Item
-            else if (Enumerable.Range(31, 60).Contains(random))
+            else if (random >= 31 && random <=60)
             {
                 RandomLoot();
             }

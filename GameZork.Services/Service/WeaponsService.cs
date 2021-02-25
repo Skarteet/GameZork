@@ -19,5 +19,11 @@ namespace GameZork.Services.Service
         {
             return this.weapons.GetCollection().Select(w => new WeaponDto(w)).ToList();
         }
+
+        public WeaponDto GetRandom()
+        {
+            var weapons = GetAll();
+            return weapons.ElementAt(new Random().Next(0, weapons.Count));
+        }
     }
 }

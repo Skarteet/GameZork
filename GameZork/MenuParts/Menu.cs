@@ -32,6 +32,9 @@ namespace GameZork.MenuParts
                     NewGameView.CreateGame();
                     break;
                 case "2":
+                    //TODO: A changer une fois la BDD implémenté
+                    NewGameView = Globals.Services.GetService<NewGame>();
+                    NewGameView.CreateGame();
                     break;
                 case "3":
                     About.BackToMenu += (o, e) => Start();
