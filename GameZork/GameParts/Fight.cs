@@ -1,22 +1,22 @@
-﻿using GameZork.Services.Dto;
-using GameZork.Services.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GameZork.Services.Dto;
+using GameZork.Services.Service;
 
 namespace GameZork.GameParts
 {
     public class Fight
     {
         private MonsterService MonsterService { get; set; }
+        private WeaponsService WeaponsService { get; set; }
         private MonsterDto Monster { get; set; }
 
         private bool EndFight { get; set; } = false;
-        public Fight(MonsterService monsterService)
+        public Fight(MonsterService monsterService, WeaponsService weaponsService)
         {
             MonsterService = monsterService;
+            WeaponsService = weaponsService;
         }
 
         public void Start()
@@ -170,12 +170,34 @@ namespace GameZork.GameParts
                 Globals.Player.HP = Globals.Player.MaxHP;
                 Console.WriteLine($"Tu es passé niveau {Globals.Player.Level} ! Tu as gagné 10HP et es maintenant en pleine forme !");
             }
+
+            if (new Random().Next(3) == 2)
+            {
+                var weapons = WeaponsService.GetRandom();
+                Console.WriteLine($"Woaw ! Tu as découvre cette arme : {weapons.Name}. Souhaites tu l'ajouter à ton inventaire ? (Y/N)");
+
+                var res = ZorkRead.ReadLine().ToLowerInvariant();
+                while (!(res == "y" || res == "n"))
+                {
+                    Console.WriteLine("Soit plus clair dans ta réponse ! (Y/N)");
+                    res = ZorkRead.ReadLine().ToLowerInvariant();
+                }
+
+                if (res == "y")
+                    Globals.Player.Weapons.Add(weapons);
+            }
             Console.WriteLine("Appuye sur Entrer pour continuer");
             ZorkRead.ReadLine();
         }
 
         private void MonsterTurn()
         {
+            var attackRandom = new Random().Next(100);
+            if (attackRandom < Monster.MissRate)
+            {
+                Console.WriteLine("Tu as de la chance ! Le monstre à raté son attaque !");
+                return;
+            }
             var dmg = Monster.Power - Globals.Player.Defense > 0 ? Monster.Power - Globals.Player.Defense : 0;
             Globals.Player.HP -= dmg;
             Console.WriteLine($"Aïe ! Tu viens de subir {dmg} dégats suite à son attaque!");
@@ -191,6 +213,14 @@ namespace GameZork.GameParts
         {
             if (weapon == null || target == null)
                 return false;
+
+            //Attaque réussi si entre MissRate et 100
+            var attackRandom = new Random().Next(100);
+            if(attackRandom < weapon.MissRate)
+            {
+                Console.WriteLine("Oh non ! Tu as raté ton attaque !");
+                return false;
+            }
 
             var dmg = (weapon.Damage + Globals.Player.Power - target.Defense) > 0 ? weapon.Damage + Globals.Player.Power - target.Defense : 0;
             target.HP -= dmg;
